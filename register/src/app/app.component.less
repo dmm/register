@@ -1,0 +1,31 @@
+.container {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 60px auto;
+}
+
+.header {
+    grid-row: 1;
+    background-color: lightsalmon;
+    display: grid;
+    grid-template-columns: 300px 1fr 200px;
+    grid-template-rows: 1fr 50px 1fr;
+}
+
+.header > .user-banner {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.header > button {
+    grid-row: 2;
+    grid-column: 3;
+}
+
+router-outlet {
+    display: none;
+}

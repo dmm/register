@@ -3,63 +3,58 @@ use std::path::Path;
 use escpos::driver::*;
 use escpos::printer::Printer;
 use escpos::utils::*;
+use fltk::app;
+use fltk::group;
+use fltk::group::Flex;
+use fltk::window::Window;
 
-use eframe::egui;
+use fltk::button::Button;
+use fltk::frame::Frame;
+use fltk::group::experimental::Grid;
+use fltk::prelude::GroupExt;
+use fltk::prelude::WidgetBase;
+use fltk::prelude::WidgetExt;
 
-fn main() -> Result<(), eframe::Error> {
-    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
-    let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_inner_size([320.0, 240.0]),
-        ..Default::default()
-    };
-    eframe::run_native(
-        "My egui App",
-        options,
-        Box::new(|cc| {
-            // This gives us image support:
-            egui_extras::install_image_loaders(&cc.egui_ctx);
+static SCREEN_HEIGHT: i32 = 600;
+static SCREEN_WIDTH: i32 = 1024;
+static HEADER_HEIGHT: i32 = 200;
+static FOOT_HEIGHT: i32 = 200;
 
-            Box::<MyApp>::default()
-        }),
-    )
-}
+static SCANNER_DEVICE: &str = "/dev/ttyACM0";
+static NFC_DEVICE: &str = "/dev/ttyACM1";
 
-struct MyApp {
-    name: String,
-    age: u32,
-}
+fn main() -> escpos::errors::Result<()> {
+    env_logger::init();
 
-impl Default for MyApp {
-    fn default() -> Self {
-        Self {
-            name: "Arthur".to_owned(),
-            age: 42,
-        }
-    }
-}
+    let app = app::App::default().with_scheme(app::Scheme::Gtk);
+    let mut wind = Window::new(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, "Hello from rust");
+    let mut main_grid = Grid::new(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, "");
 
-impl eframe::App for MyApp {
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading("My egui Application");
-            ui.horizontal(|ui| {
-                let name_label = ui.label("Your name: ");
-                ui.text_edit_singleline(&mut self.name)
-                    .labelled_by(name_label.id);
-            });
-            ui.add(egui::Slider::new(&mut self.age, 0..=120).text("age"));
-            if ui.button("Click each year").clicked() {
-                self.age += 1;
-            }
-            ui.label(format!("Hello '{}', age {}", self.name, self.age));
+    let mut header_flex = Flex::new(0, 0, SCREEN_WIDTH, HEADER_HEIGHT, "");
+    header_flex.set_type(group::FlexType::Row);
+    let mut greeting = Frame::new(0, 0, 400, HEADER_HEIGHT, "Hi Charlotte!");
+    header_flex.end();
+    let mut main_flex = Flex::new(
+        0,
+        0,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT - HEADER_HEIGHT - FOOT_HEIGHT,
+        "",
+    );
+    main_flex.set_type(group::FlexType::Row);
+    main_flex.end();
+    let mut footer_flex = Flex::new(0, 0, SCREEN_WIDTH, FOOT_HEIGHT, "");
+    footer_flex.set_type(group::FlexType::Row);
+    footer_flex.end();
+    main_grid.end();
 
-            ui.image(egui::include_image!("../ferris.bmp"));
-        });
-    }
-}
-
-fn main2() -> escpos::errors::Result<()> {
-    //    env_logger::init();
+    let mut frame = Frame::new(0, 0, 400, 200, "");
+    let mut but = Button::new(160, 210, 80, 40, "Click me!");
+    wind.end();
+    wind.show();
+    wind.maximize();
+    but.set_callback(move |_| frame.set_label("Hello World!")); // the closure capture is mutable borrow to our button
+    app.run().unwrap();
 
     //    let driver = NetworkDriver::open("192.168.1.248", 9100)?;
     let driver = FileDriver::open(Path::new("/dev/usb/lp0")).unwrap();

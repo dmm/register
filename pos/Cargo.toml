@@ -7,11 +7,5 @@ edition = "2021"
 
 [dependencies]
 escpos = { version = "0.6.0", features = ["full"] }
-eframe = { version = "0.24.1", features = [
-    "__screenshot", # __screenshot is so we can dump a screenshot using EFRAME_SCREENSHOT_TO
-] }
-
-# For image support:
-egui_extras = { version = "0.24.1", features = ["image"] }
-
 env_logger = "0.10"
+fltk = { version = "^1.4", git = "https://github.com/fltk-rs/fltk-rs", features = ["fltk-bundled"] }
