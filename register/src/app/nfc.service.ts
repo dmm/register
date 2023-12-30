@@ -23,6 +23,7 @@ export class NfcService {
     unlistener?: UnlistenFn;
     constructor() {
         (async () => {
+            await listen;
             this.unlistener = await listen("nfc", (event: Event) => {
                 let payload: Payload = JSON.parse(event.payload)
                 console.log("NFC service payload: " + payload);
@@ -30,7 +31,7 @@ export class NfcService {
                     this.sub.next(payload.Name);
 
                 }
-            })();
-        });
+            });
+        })();
     }
 }

@@ -8,7 +8,7 @@ import {
     MatDialogActions,
     MatDialogClose,
     MatDialogTitle,
-    MatDialogContent, x
+    MatDialogContent,
 } from '@angular/material/dialog';
 import { LoginService } from '../login.service';
 import { BarcodeService } from '../barcode.service';
