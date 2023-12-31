@@ -15,11 +15,23 @@ pub(crate) struct Scan {
 }
 
 pub(crate) fn start_nfc(handle: AppHandle) {
+    loop {
+        nfc(&handle);
+        std::thread::sleep(Duration::from_millis(1000));
+        info!("Restarting NFC!");
+    }
+}
+
+fn nfc(handle: &AppHandle) {
     let port_name = env::var("NFC_TTY").unwrap();
-    let mut port = serialport::new(port_name, 9600)
+    let mut port = match serialport::new(port_name, 9600)
+        .flow_control(serialport::FlowControl::None)
         .timeout(Duration::from_millis(100))
         .open()
-        .expect("Failed to open NFC port");
+    {
+        Ok(port) => port,
+        Err(_) => return,
+    };
 
     let reader = BufReader::new(port);
 
@@ -28,7 +40,7 @@ pub(crate) fn start_nfc(handle: AppHandle) {
             Ok(line) => line,
             Err(err) => match err.kind() {
                 std::io::ErrorKind::TimedOut => continue,
-                _ => panic!("nfc i/o error!"),
+                _ => return,
             },
         };
         // skip empty lines
@@ -38,6 +50,7 @@ pub(crate) fn start_nfc(handle: AppHandle) {
         info!("Backend: Got NFC {}", line);
         if let Err(err) = handle.emit_all("nfc", line) {
             error!("Error emiting NFC event: {}", err);
+            return;
         }
     }
 }

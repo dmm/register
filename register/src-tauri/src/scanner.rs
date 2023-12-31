@@ -13,11 +13,22 @@ pub(crate) struct Scan {
 }
 
 pub(crate) fn start_scanner(handle: AppHandle) {
+    loop {
+        scan(&handle);
+        std::thread::sleep(Duration::from_millis(1000));
+        info!("Restarting scanner!");
+    }
+}
+fn scan(handle: &AppHandle) {
     let port_name = env::var("SCANNER_TTY").unwrap();
-    let port = serialport::new(port_name, 9600)
+    let port = match serialport::new(port_name, 9600)
+        .flow_control(serialport::FlowControl::None)
         .timeout(Duration::from_millis(100))
         .open()
-        .expect("Failed to open scanner port");
+    {
+        Ok(port) => port,
+        Err(_) => return,
+    };
 
     let reader = BufReader::new(port);
 
@@ -26,7 +37,7 @@ pub(crate) fn start_scanner(handle: AppHandle) {
             Ok(line) => line,
             Err(err) => match err.kind() {
                 std::io::ErrorKind::TimedOut => continue,
-                _ => panic!("scanner i/o error!"),
+                _ => return,
             },
         };
         // skip empty lines
@@ -36,6 +47,7 @@ pub(crate) fn start_scanner(handle: AppHandle) {
         info!("Backend: Got Code {}", line);
         if let Err(err) = handle.emit_all("barcode", line) {
             error!("Error emiting scan event: {}", err);
+            return;
         }
     }
 }
