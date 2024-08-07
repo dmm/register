@@ -1,8 +1,14 @@
 # Register
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.7.
-
 ## Development server
+
+### install dependencies
+```
+$ sudo dnf install -y javascriptcoregtk4.0-devel nodejs atk-devel cairo-devel cairo-gobject-devel gdk-pixbuf2-devel gtk3-devel webkitgtk4.0-devel systemd-devel
+
+```
+
+Run `cargo tauri dev`
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
