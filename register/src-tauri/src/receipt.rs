@@ -4,7 +4,7 @@ use escpos::{
     driver::{ConsoleDriver, Driver, FileDriver},
     errors::PrinterError,
     printer::Printer,
-    utils::{JustifyMode, PageCode, Protocol},
+    utils::{BitImageOption, BitImageSize, JustifyMode, PageCode, Protocol},
 };
 use log::{error, info};
 use serde::Deserialize;
@@ -23,7 +23,7 @@ impl Item {
         info!("PRICE: {}", self.price);
         let cents = self.price % 100;
         let dollars = self.price / 100;
-        format!("{}.{}", dollars, cents)
+        format!("{}.{:02}", dollars, cents)
     }
 }
 
@@ -34,24 +34,35 @@ pub(crate) struct Cart {
     pub checker: String,
 }
 
+impl Cart {
+    pub fn get_total(&self) -> String {
+        return format!("${}.{:02}", self.total / 100, self.total % 100);
+    }
+}
+
 pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
     let driver = FileDriver::open(Path::new("/dev/usb/lp0"))?;
-    //let driver = ConsoleDriver::open(true);
+    //    let driver = ConsoleDriver::open(true);
 
-    let mut printer = Printer::new(driver.clone(), Protocol::default());
+    let mut printer = Printer::new(driver.clone(), Protocol::default(), None);
     printer.debug_mode(Some(escpos::utils::DebugMode::Dec));
     printer.init()?.justify(JustifyMode::CENTER)?;
 
-    printer.bit_image("/home/dmm//rust-logo-small.png")?;
+    printer.bit_image_option(
+        "/home/dmm//rust-logo-small.png",
+        BitImageOption::new(Some(256), None, BitImageSize::Normal)?,
+    )?;
+
+    printer.feeds(2)?;
 
     // Name + address
     let date = chrono::Local::now();
     printer
+        .smoothing(false)?
         .bold(true)?
         .size(2, 2)?
         .writeln("Mattli Shop")?
         .reset_size()?
-        .bold(false)?
         .writeln("123 Mattli Dr")?
         .writeln("65109 Jefferson City")?
         .feed()?
@@ -59,7 +70,7 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
         .writeln(&date.format("%Y-%m-%d %H:%M:%S").to_string())?
         .writeln("-".repeat(CHARS_BY_LINE).as_str())?;
 
-    for item in cart.items {
+    for item in &cart.items {
         let mut characters_length = item.name.len() + item.get_price().len() + 3;
 
         if item.quantity > 1 {
@@ -67,7 +78,7 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
         }
 
         // number of spaces between name and price
-        let spaces = "".repeat(CHARS_BY_LINE - characters_length);
+        let spaces = " ".repeat(CHARS_BY_LINE - characters_length);
 
         // print item
         if item.quantity > 1 {
@@ -79,9 +90,16 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
 
     // total
     printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
+    printer.code39("12345678")?;
+    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
+    let total_title_str = "Total:";
 
-    printer.feed()?;
-    printer.print_cut()?;
+    printer.write(&total_title_str)?;
+    printer.write(&" ".repeat(CHARS_BY_LINE - total_title_str.len() - cart.get_total().len()))?;
+    printer.writeln(&cart.get_total())?;
+
+    printer.feeds(5)?;
+    printer.print()?;
 
     Ok(())
 }
