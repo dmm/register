@@ -1,12 +1,13 @@
 use std::{
     env,
     io::{self, BufRead, BufReader},
-    thread,
+    thread::{self, sleep},
     time::Duration,
 };
 
+use base64::{engine::general_purpose::STANDARD, Engine as _};
 use log::{error, info};
-use serialport::FlowControl;
+use nfc1::{target_info::TargetInfo, Target};
 use tauri::{AppHandle, Manager};
 
 #[derive(Clone, serde::Serialize)]
@@ -22,35 +23,62 @@ pub(crate) fn start_nfc(handle: AppHandle) {
     }
 }
 
-fn nfc(handle: &AppHandle) {
-    let port_name = env::var("NFC_TTY").unwrap();
-    let mut port = match serialport::new(port_name, 9600)
-        .flow_control(serialport::FlowControl::None)
-        .timeout(Duration::from_millis(100))
-        .open()
-    {
-        Ok(port) => port,
-        Err(_) => return,
+fn nfc(handle: &AppHandle) -> nfc1::Result<()> {
+    // const nfc_modulation nmModulations[6] = {
+    //   { .nmt = NMT_ISO14443A, .nbr = NBR_106 },
+    //   { .nmt = NMT_ISO14443B, .nbr = NBR_106 },
+    //   { .nmt = NMT_FELICA, .nbr = NBR_212 },
+    //   { .nmt = NMT_FELICA, .nbr = NBR_424 },
+    //   { .nmt = NMT_JEWEL, .nbr = NBR_106 },
+    //   { .nmt = NMT_ISO14443BICLASS, .nbr = NBR_106 },
+    // };
+
+    let nfc_tty = match std::env::var("NFC_TTY") {
+        Ok(val) => val,
+        Err(_) => {
+            eprintln!("NFC_TTY NOT SET!");
+            String::new()
+        }
     };
 
-    let reader = BufReader::new(port);
+    let mut context = nfc1::Context::new()?;
+    let mut device = context.open_with_connstring(&format!("pn532_uart:{}", nfc_tty))?;
+    eprint!("NFC reader: {} opened\n\n", device.name());
+    device.initiator_init()?;
 
-    for res in reader.lines() {
-        let line = match res {
-            Ok(line) => line,
-            Err(err) => match err.kind() {
-                std::io::ErrorKind::TimedOut => continue,
-                _ => return,
-            },
-        };
-        // skip empty lines
-        if line.len() < 3 {
-            continue;
+    // Configure the CRC
+    device.set_property_bool(nfc1::Property::HandleCrc, false)?;
+    // Use raw send/receive methods
+    device.set_property_bool(nfc1::Property::EasyFraming, false)?;
+    // Disable 14443-4 autoswitching
+    device.set_property_bool(nfc1::Property::AutoIso144434, false)?;
+
+    let mut target_found = false;
+
+    loop {
+        //        eprintln!("Looking for targets...\n");
+        match device.initiator_select_passive_target(&nfc1::Modulation {
+            modulation_type: nfc1::ModulationType::Iso14443a,
+            baud_rate: nfc1::BaudRate::Baud106,
+        }) {
+            Ok(target) => {
+                if let TargetInfo::Iso14443a(info) = &target.target_info {
+                    let encoded_uid = STANDARD.encode(&info.uid[0..3]);
+                    if !target_found {
+                        target_found = true;
+                        let msg = format!("{{\"uid\": \"{}\"}}", encoded_uid);
+                        eprintln!("{}", msg);
+                        if let Err(err) = handle.emit_all("nfc", msg) {
+                            error!("Error emiting NFC event: {}", err);
+                        }
+                    }
+                }
+            }
+            Err(_) => {
+                //
+                target_found = false;
+            }
         }
-        info!("Backend: Got NFC {}", line);
-        if let Err(err) = handle.emit_all("nfc", line) {
-            error!("Error emiting NFC event: {}", err);
-            return;
-        }
+        sleep(Duration::from_millis(100));
     }
 }
