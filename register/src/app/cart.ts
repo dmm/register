@@ -1,4 +1,3 @@
-
 import { Item } from './item';
 
 export class CartItem {
@@ -15,7 +14,7 @@ export class CartItem {
 export class Cart {
   items: Map<string, CartItem> = new Map();
 
-  constructor() { }
+  constructor() {}
 
   addItem(item: Item) {
     let res = this.items.get(item.barcode);
@@ -49,16 +48,16 @@ export class Cart {
       return {
         name: i.item.name,
         quantity: i.quantity,
-        price: i.item.price
+        price: i.item.price,
       };
     });
 
     return {
       cart: {
-      items: items,
-      total: this.getTotal(),
-      checker: checker
-    }
+        items: items,
+        total: this.getTotal(),
+        checker: checker,
+      },
     };
   }
 }

@@ -1,7 +1,5 @@
-
-
 export class Item {
-  barcode: string
+  barcode: string;
   name: string;
   price: number;
 

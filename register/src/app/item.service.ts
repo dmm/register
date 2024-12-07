@@ -98,16 +98,15 @@ const nouns = [
 ];
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemService {
-
-  constructor() { }
+  constructor() {}
 
   async calculateName(barcode: string) {
     const encoder = new TextEncoder();
     const data = encoder.encode(barcode);
-    const hash = await crypto.subtle.digest("SHA-256", data);
+    const hash = await crypto.subtle.digest('SHA-256', data);
     const view = new Uint8Array(hash);
 
     const adjIndex = view[14] % adjectives.length;
@@ -119,13 +118,17 @@ export class ItemService {
   async calculatePrice(barcode: string) {
     const encoder = new TextEncoder();
     const data = encoder.encode(barcode);
-    const hash = await crypto.subtle.digest("SHA-256", data);
+    const hash = await crypto.subtle.digest('SHA-256', data);
     const view = new Uint8Array(hash);
 
     return Math.round((view[10] + view[11] + view[12]) / 2);
   }
 
   async get(barcode: string) {
-    return new Item(barcode, await this.calculateName(barcode), await this.calculatePrice(barcode));
+    return new Item(
+      barcode,
+      await this.calculateName(barcode),
+      await this.calculatePrice(barcode),
+    );
   }
 }

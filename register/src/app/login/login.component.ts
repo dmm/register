@@ -8,15 +8,15 @@ import { LoginService } from '../login.service';
   standalone: true,
   imports: [RouterLink, RouterLinkActive, MatIconModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.less'
+  styleUrl: './login.component.less',
 })
 export class LoginComponent {
   constructor(public loginService: LoginService) {
-    (async () => {
-      while (this.loginService.currentUser === "") {
-        console.log("trying login");
-        await this.loginService.tryLogin();
-      }
-    })();
+    // (async () => {
+    //   while (this.loginService.currentUser === "") {
+    //     console.log("trying login");
+    //     await this.loginService.tryLogin();
+    //   }
+    // })();
   }
 }
