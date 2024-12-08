@@ -49,7 +49,7 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
     printer.init()?.justify(JustifyMode::CENTER)?;
 
     printer.bit_image_option(
-        "/home/dmm//rust-logo-small.png",
+        "/home/dmm/code/register/register/src-tauri/icons/mattli_logo.png",
         BitImageOption::new(Some(256), None, BitImageSize::Normal)?,
     )?;
 
@@ -89,14 +89,15 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
     }
 
     // total
-    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
-    printer.code39("12345678")?;
-    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
     let total_title_str = "Total:";
 
     printer.write(&total_title_str)?;
     printer.write(&" ".repeat(CHARS_BY_LINE - total_title_str.len() - cart.get_total().len()))?;
     printer.writeln(&cart.get_total())?;
+
+    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
+    printer.code39("12345678")?;
+    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
 
     printer.feeds(5)?;
     printer.print()?;
