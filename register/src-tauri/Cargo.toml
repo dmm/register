@@ -25,6 +25,7 @@ tauri = { version = "1.5", features = [] }
 serialport = { version = "4.3.0", default-features = false }
 nfc1 = "0.5.2"
 base64 = "0.22.1"
+rust-embed = { version = "8.5.0", features = ["interpolate-folder-path"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

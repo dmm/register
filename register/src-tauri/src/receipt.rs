@@ -7,11 +7,17 @@ use escpos::{
     utils::{BitImageOption, BitImageSize, JustifyMode, PageCode, Protocol},
 };
 use log::{error, info};
+use rust_embed::Embed;
 use serde::Deserialize;
 
 const CHARS_BY_LINE: usize = 32;
 
+#[derive(Embed)]
+#[folder = "icons/"]
+struct Icons;
+
 #[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub(crate) struct Item {
     pub name: String,
     pub quantity: u32,
@@ -28,10 +34,13 @@ impl Item {
 }
 
 #[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub(crate) struct Cart {
     pub items: Vec<Item>,
     pub total: u32,
+    pub customer: String,
     pub checker: String,
+    pub sound_code: String,
 }
 
 impl Cart {
@@ -48,9 +57,17 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
     printer.debug_mode(Some(escpos::utils::DebugMode::Dec));
     printer.init()?.justify(JustifyMode::CENTER)?;
 
-    printer.bit_image_option(
-        "/home/dmm/code/register/register/src-tauri/icons/mattli_logo.png",
-        BitImageOption::new(Some(256), None, BitImageSize::Normal)?,
+    let mattli_logo = match Icons::get("mattli_logo.png") {
+        Some(logo) => logo,
+        None => {
+            error!("Couldn't read mattli logo!");
+            return Ok(());
+        }
+    };
+
+    printer.bit_image_from_bytes_option(
+        &mattli_logo.data,
+        BitImageOption::new(Some(272), None, BitImageSize::Normal)?,
     )?;
 
     printer.feeds(2)?;
@@ -96,7 +113,11 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
     printer.writeln(&cart.get_total())?;
 
     printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
-    printer.code39("12345678")?;
+    printer.writeln(&format!("Thank you {}!", &cart.customer))?;
+    printer.writeln(&format!("Your checker today was {}.", &cart.checker))?;
+
+    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
+    printer.itf(&cart.sound_code)?;
     printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
 
     printer.feeds(5)?;
