@@ -37,7 +37,7 @@ export class AppComponent {
     this.loginService.isLoggedIn().subscribe((loggedIn) => {
       this.ngZone.run(() => {
         if (loggedIn) {
-          this.router.navigate(['/', 'checkout']);
+          this.router.navigate(['/', 'pointofsale']);
         } else {
           this.router.navigate(['/', 'login']);
         }

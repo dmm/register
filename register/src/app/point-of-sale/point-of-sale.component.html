@@ -1,0 +1,4 @@
+
+<app-item-scan (submitted)="cartSubmitted($event)" *ngIf="pointOfSaleService.status.kind === 'ItemScan'"/>
+<app-payment (payed)="paymentSubmitted($event)" *ngIf="pointOfSaleService.status.kind === 'Payment'" />
+<app-receipt *ngIf="pointOfSaleService.status.kind === 'Receipt'" />
