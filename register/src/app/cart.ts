@@ -1,6 +1,6 @@
 import { Item } from './item';
 
-const MAX_BONUS_SOUND = 7;
+const MAX_BONUS_SOUND = 88;
 
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);

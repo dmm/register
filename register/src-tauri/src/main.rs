@@ -19,28 +19,35 @@ async fn print_receipt(cart: Cart) {
 
 #[tauri::command]
 async fn play_bonus_sound(app_handle: AppHandle, number: i32) {
-    let resource_path = app_handle
-        .path_resolver()
-        .resolve_resource(&format!("resources/bonus_sounds/{:04}.mp3", number))
-        .unwrap();
+    let bonus_name = format!("resources/bonus_sounds/{:04}.mp3", number);
+    let resource_path = match app_handle.path_resolver().resolve_resource(&bonus_name) {
+        Some(path) => path,
+        None => {
+            error!("Failed to find bonus sound! {}", bonus_name);
+            return;
+        }
+    };
 
-    if let Err(err) = spawn_blocking(move || -> anyhow::Result<()> {
+    match spawn_blocking(move || -> anyhow::Result<()> {
         let (_stream, stream_handle) = OutputStream::try_default()?;
-
-        let file = BufReader::new(std::fs::File::open(&resource_path)?);
-
+        let file1 = std::fs::File::open(&resource_path)?;
+        let file = BufReader::new(file1);
         let source = Decoder::new(file)?;
-
         let sink = rodio::Sink::try_new(&stream_handle)?;
-
         sink.append(source);
-
         sink.sleep_until_end();
         Ok(())
     })
     .await
     {
-        error!("Error playing bonus sound! {:?}", err);
+        Ok(Err(err)) => {
+            error!("Error playing bonus sound: {}", err);
+        }
+        Ok(Ok(_)) => (),
+
+        Err(err) => {
+            error!("Error running bonus sound thread: {}", err);
+        }
     }
 }
 
