@@ -9,17 +9,16 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 
 @Component({
-  selector: 'app-point-of-sale',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    ItemScanComponent,
-    PaymentComponent,
-    ReceiptComponent,
-  ],
-  templateUrl: './point-of-sale.component.html',
-  styleUrl: './point-of-sale.component.less',
+    selector: 'app-point-of-sale',
+    imports: [
+        CommonModule,
+        RouterModule,
+        ItemScanComponent,
+        PaymentComponent,
+        ReceiptComponent,
+    ],
+    templateUrl: './point-of-sale.component.html',
+    styleUrl: './point-of-sale.component.less'
 })
 export class PointOfSaleComponent {
   constructor(

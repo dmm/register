@@ -7,17 +7,16 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterLinkActive,
-    RouterOutlet,
-    MatButtonModule,
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.less',
+    selector: 'app-root',
+    imports: [
+        CommonModule,
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+        MatButtonModule,
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.less'
 })
 export class AppComponent {
   title = 'register';

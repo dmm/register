@@ -3,11 +3,10 @@ import { NfcService } from '../nfc.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-payment',
-  standalone: true,
-  imports: [],
-  templateUrl: './payment.component.html',
-  styleUrl: './payment.component.less',
+    selector: 'app-payment',
+    imports: [],
+    templateUrl: './payment.component.html',
+    styleUrl: './payment.component.less'
 })
 export class PaymentComponent {
   sub?: Subscription;

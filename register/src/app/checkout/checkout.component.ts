@@ -32,11 +32,10 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-checkout',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule],
-  templateUrl: './checkout.component.html',
-  styleUrl: './checkout.component.less',
+    selector: 'app-checkout',
+    imports: [CommonModule, MatButtonModule],
+    templateUrl: './checkout.component.html',
+    styleUrl: './checkout.component.less'
 })
 export class CheckoutComponent {
   @ViewChild('itemList', { static: false }) private itemList: ElementRef =
@@ -97,17 +96,16 @@ export class CheckoutComponent {
 }
 
 @Component({
-  selector: 'payment-dialog',
-  templateUrl: 'payment-dialog.html',
-  styleUrl: 'payment-dialog.less',
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatDialogActions,
-    MatDialogClose,
-    MatDialogTitle,
-    MatDialogContent,
-  ],
+    selector: 'payment-dialog',
+    templateUrl: 'payment-dialog.html',
+    styleUrl: 'payment-dialog.less',
+    imports: [
+        MatButtonModule,
+        MatDialogActions,
+        MatDialogClose,
+        MatDialogTitle,
+        MatDialogContent,
+    ]
 })
 export class PaymentDialog {
   paymentUser: string = '';

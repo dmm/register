@@ -18,11 +18,10 @@ import { CommonModule, CurrencyPipe, SlicePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-item-scan',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, SlicePipe, CurrencyPipe],
-  templateUrl: './item-scan.component.html',
-  styleUrl: './item-scan.component.less',
+    selector: 'app-item-scan',
+    imports: [CommonModule, MatButtonModule, SlicePipe, CurrencyPipe],
+    templateUrl: './item-scan.component.html',
+    styleUrl: './item-scan.component.less'
 })
 export class ItemScanComponent {
   @ViewChild('itemList', { static: false }) private itemList: ElementRef =
