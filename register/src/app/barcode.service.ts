@@ -17,7 +17,7 @@ interface BonusSound {
   code: string;
 }
 
-type Code = Product | BonusSound;
+export type Code = Product | BonusSound;
 
 function parseCode(codeString: string): Code {
   if (codeString.startsWith('777')) {
