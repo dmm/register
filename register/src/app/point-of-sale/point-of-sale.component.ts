@@ -7,20 +7,24 @@ import { CommonModule } from '@angular/common';
 import { Cart } from '../cart';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { LoginService } from '../login.service';
 
 @Component({
-    selector: 'app-point-of-sale',
-    imports: [
-        CommonModule,
-        RouterModule,
-        ItemScanComponent,
-        PaymentComponent,
-        ReceiptComponent,
-    ],
-    templateUrl: './point-of-sale.component.html',
-    styleUrl: './point-of-sale.component.less'
+  selector: 'app-point-of-sale',
+  imports: [
+    CommonModule,
+    RouterModule,
+    ItemScanComponent,
+    PaymentComponent,
+    ReceiptComponent,
+  ],
+  templateUrl: './point-of-sale.component.html',
+  styleUrl: './point-of-sale.component.less',
 })
 export class PointOfSaleComponent {
+  mode = toSignal(this.pointOfSaleService.mode$);
+
   constructor(
     public pointOfSaleService: PointOfSaleService,
     private router: Router,

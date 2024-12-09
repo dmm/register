@@ -1,4 +1,5 @@
-
-<app-item-scan (submitted)="cartSubmitted($event)" *ngIf="pointOfSaleService.status.kind === 'ItemScan'"/>
-<app-payment (payed)="paymentSubmitted($event)" *ngIf="pointOfSaleService.status.kind === 'Payment'" />
-<app-receipt *ngIf="pointOfSaleService.status.kind === 'Receipt'" />
+<ng-container [ngSwitch]="mode()?.kind">
+<app-item-scan *ngSwitchCase="'ItemScan'" (submitted)="cartSubmitted($event)"/>
+<app-payment *ngSwitchCase="'Payment'" (payed)="paymentSubmitted($event)"  />
+<app-receipt *ngSwitchCase="'Receipt'"  />
+</ng-container>
