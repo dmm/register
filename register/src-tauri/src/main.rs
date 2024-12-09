@@ -7,11 +7,11 @@ use std::thread;
 use log::{error, info};
 
 use receipt::Cart;
-use tauri::Manager;
+use tauri::{async_runtime::spawn_blocking, Manager};
 
 #[tauri::command]
-fn print_receipt(cart: Cart) {
-    if let Err(err) = receipt::print_receipt(cart) {
+async fn print_receipt(cart: Cart) {
+    if let Err(err) = spawn_blocking(move || receipt::print_receipt(cart)).await {
         error!("Error printing receipt! {:?}", err);
     }
 }
