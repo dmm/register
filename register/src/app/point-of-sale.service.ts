@@ -31,6 +31,13 @@ export class PointOfSaleService {
 
   constructor(private loginService: LoginService) {}
 
+  playBonusSound(code: string) {
+    let num = parseInt(code.substring(4), 10);
+    invoke('play_bonus_sound', { number: num }).then((res) => {
+      console.log('Bonus Sound played!');
+    });
+  }
+
   reset() {
     this.currentMode.next({ kind: 'ItemScan' });
   }

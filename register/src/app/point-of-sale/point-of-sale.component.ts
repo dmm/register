@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { ItemScanComponent } from '../item-scan/item-scan.component';
 import { PaymentComponent } from '../payment/payment.component';
 import { ReceiptComponent } from '../receipt/receipt.component';
@@ -9,13 +9,14 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
+  MAT_DIALOG_DATA,
   MatDialog,
   MatDialogContent,
   MatDialogModule,
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { BarcodeService, Code } from '../barcode.service';
+import { BarcodeService, BonusSound, Code } from '../barcode.service';
 import { MatButtonModule } from '@angular/material/button';
 import { resolveResource } from '@tauri-apps/api/path';
 import { readBinaryFile } from '@tauri-apps/api/fs';
@@ -60,6 +61,7 @@ export class PointOfSaleComponent {
     if (code.kind === 'BonusSound') {
       console.log(`GOT BONUS SOUND! ${code.code}`);
       this.dialog.open(BonusSoundDialogComponent, {
+        data: code,
         width: '250px',
       });
     }
@@ -83,8 +85,12 @@ export class PointOfSaleComponent {
   styleUrl: './bonus-sound-dialog.component.less',
 })
 export class BonusSoundDialogComponent {
-  private audio = new Audio();
   readonly dialogRef = inject(MatDialogRef<BonusSoundDialogComponent>);
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: BonusSound,
+    public pointOfSaleService: PointOfSaleService,
+  ) {}
 
   ngOnInit() {
     async () => {
@@ -97,7 +103,8 @@ export class BonusSoundDialogComponent {
   }
 
   playSound() {
-    this.audio.play();
+    console.log('Dialog playing sound!');
+    this.pointOfSaleService.playBonusSound(this.data.code);
   }
 
   close() {

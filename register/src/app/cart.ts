@@ -1,5 +1,11 @@
 import { Item } from './item';
 
+const MAX_BONUS_SOUND = 7;
+
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
+
 export class CartItem {
   item: Item;
   quantity: number = 1;
@@ -43,6 +49,13 @@ export class Cart {
     }
   }
 
+  private generateSoundCode(): string {
+    let soundNumber = getRandomInt(MAX_BONUS_SOUND - 1) + 1;
+    let paddedNumber = soundNumber.toString().padStart(4, '0');
+
+    return `7777${paddedNumber}`;
+  }
+
   toReceiptCart(customer: string, checker: string) {
     let items = Array.from(this.items.values()).map((i) => {
       return {
@@ -58,7 +71,7 @@ export class Cart {
         total: this.getTotal(),
         customer: customer,
         checker: checker,
-        soundCode: '77745678',
+        soundCode: this.generateSoundCode(),
       },
     };
   }

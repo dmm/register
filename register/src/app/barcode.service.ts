@@ -7,12 +7,12 @@ class Event {
   payload: string = '';
 }
 
-interface Product {
+export interface Product {
   kind: 'Product';
   code: string;
 }
 
-interface BonusSound {
+export interface BonusSound {
   kind: 'BonusSound';
   code: string;
 }
