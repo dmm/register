@@ -7,11 +7,37 @@ class Event {
   payload: string = '';
 }
 
+interface Product {
+  kind: 'Product';
+  code: string;
+}
+
+interface BonusSound {
+  kind: 'BonusSound';
+  code: string;
+}
+
+type Code = Product | BonusSound;
+
+function parseCode(codeString: string): Code {
+  if (codeString.startsWith('777')) {
+    return {
+      kind: 'BonusSound',
+      code: codeString.substring(3),
+    };
+  } else {
+    return {
+      kind: 'Product',
+      code: codeString,
+    };
+  }
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class BarcodeService {
-  private barcodeSubject = new Subject<string>();
+  private barcodeSubject = new Subject<Code>();
 
   constructor() {
     (async () => {
@@ -20,7 +46,7 @@ export class BarcodeService {
         //      let payload = event.payload as Payload;
         console.log(event);
         //      this.barcodeSubject.next(event.payload as string);
-        this.barcodeSubject.next(event.payload);
+        this.barcodeSubject.next(parseCode(event.payload));
       });
       console.log('LISTENING...');
     })();

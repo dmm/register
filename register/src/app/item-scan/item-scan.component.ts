@@ -13,7 +13,6 @@ import { ItemService } from '../item.service';
 
 import { Cart } from '../cart';
 
-import { invoke } from '@tauri-apps/api/tauri';
 import { CommonModule, CurrencyPipe, SlicePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -32,16 +31,17 @@ export class ItemScanComponent {
   @Output() submitted = new EventEmitter<Cart>();
 
   constructor(
-    private loginService: LoginService,
     private barcodeService: BarcodeService,
     private itemService: ItemService,
     private changeDetection: ChangeDetectorRef,
   ) {
     barcodeService.load().subscribe(async (barcode) => {
-      let item = await this.itemService.get(barcode);
-      this.cart.addItem(item);
-      this.changeDetection.detectChanges();
-      this.scrollToBottom();
+      if (barcode.kind === 'Product') {
+        let item = await this.itemService.get(barcode.code);
+        this.cart.addItem(item);
+        this.changeDetection.detectChanges();
+        this.scrollToBottom();
+      }
     });
   }
 

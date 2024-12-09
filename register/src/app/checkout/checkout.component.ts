@@ -49,14 +49,7 @@ export class CheckoutComponent {
     private itemService: ItemService,
     private changeDetection: ChangeDetectorRef,
     public dialog: MatDialog,
-  ) {
-    barcodeService.load().subscribe(async (barcode) => {
-      let item = await this.itemService.get(barcode);
-      this.cart.addItem(item);
-      this.changeDetection.detectChanges();
-      this.scrollToBottom();
-    });
-  }
+  ) {}
 
   scrollToBottom() {
     this.itemList.nativeElement.scrollTop =
