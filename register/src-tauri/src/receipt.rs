@@ -117,6 +117,7 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
     printer.writeln(&format!("Your checker today was {}.", &cart.checker))?;
 
     printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
+    printer.size(2, 2)?.writeln("BONUS SOUND")?.reset_size()?;
     printer.itf(&cart.sound_code)?;
     printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
 
