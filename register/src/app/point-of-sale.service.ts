@@ -63,6 +63,7 @@ export class PointOfSaleService {
       });
 
       this.receiptTimer = setTimeout(() => {
+        this.receiptTimer = undefined;
         this.reset();
       }, 5000);
     } else {
