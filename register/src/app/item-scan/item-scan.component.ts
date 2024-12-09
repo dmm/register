@@ -18,10 +18,10 @@ import { CommonModule, CurrencyPipe, SlicePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'app-item-scan',
-    imports: [CommonModule, MatButtonModule, SlicePipe, CurrencyPipe],
-    templateUrl: './item-scan.component.html',
-    styleUrl: './item-scan.component.less'
+  selector: 'app-item-scan',
+  imports: [CommonModule, MatButtonModule, SlicePipe, CurrencyPipe],
+  templateUrl: './item-scan.component.html',
+  styleUrl: './item-scan.component.less',
 })
 export class ItemScanComponent {
   @ViewChild('itemList', { static: false }) private itemList: ElementRef =
@@ -48,14 +48,6 @@ export class ItemScanComponent {
   scrollToBottom() {
     this.itemList.nativeElement.scrollTop =
       this.itemList.nativeElement.scrollHeight;
-  }
-
-  checkout() {
-    let receiptCart = this.cart.toReceiptCart(this.loginService.currentUser);
-    this.clearCart();
-    invoke('print_receipt', receiptCart).then((res) => {
-      console.log('Receipt printed!');
-    });
   }
 
   submit(): void {

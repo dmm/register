@@ -43,7 +43,7 @@ export class Cart {
     }
   }
 
-  toReceiptCart(checker: string) {
+  toReceiptCart(customer: string, checker: string) {
     let items = Array.from(this.items.values()).map((i) => {
       return {
         name: i.item.name,
@@ -56,7 +56,9 @@ export class Cart {
       cart: {
         items: items,
         total: this.getTotal(),
+        customer: customer,
         checker: checker,
+        soundCode: '77745678',
       },
     };
   }

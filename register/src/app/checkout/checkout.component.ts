@@ -32,10 +32,10 @@ export interface DialogData {
 }
 
 @Component({
-    selector: 'app-checkout',
-    imports: [CommonModule, MatButtonModule],
-    templateUrl: './checkout.component.html',
-    styleUrl: './checkout.component.less'
+  selector: 'app-checkout',
+  imports: [CommonModule, MatButtonModule],
+  templateUrl: './checkout.component.html',
+  styleUrl: './checkout.component.less',
 })
 export class CheckoutComponent {
   @ViewChild('itemList', { static: false }) private itemList: ElementRef =
@@ -63,13 +63,7 @@ export class CheckoutComponent {
       this.itemList.nativeElement.scrollHeight;
   }
 
-  checkout() {
-    let receiptCart = this.cart.toReceiptCart(this.loginService.currentUser);
-    this.clearCart();
-    invoke('print_receipt', receiptCart).then((res) => {
-      console.log('Receipt printed!');
-    });
-  }
+  checkout() {}
 
   openPaymentDialog(
     enterAnimationDuration: string,
@@ -96,16 +90,16 @@ export class CheckoutComponent {
 }
 
 @Component({
-    selector: 'payment-dialog',
-    templateUrl: 'payment-dialog.html',
-    styleUrl: 'payment-dialog.less',
-    imports: [
-        MatButtonModule,
-        MatDialogActions,
-        MatDialogClose,
-        MatDialogTitle,
-        MatDialogContent,
-    ]
+  selector: 'payment-dialog',
+  templateUrl: 'payment-dialog.html',
+  styleUrl: 'payment-dialog.less',
+  imports: [
+    MatButtonModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogTitle,
+    MatDialogContent,
+  ],
 })
 export class PaymentDialog {
   paymentUser: string = '';
