@@ -11,15 +11,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
-  MatDialogContent,
   MatDialogModule,
   MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 import { BarcodeService, BonusSound, Code } from '../barcode.service';
-import { MatButtonModule } from '@angular/material/button';
-import { resolveResource } from '@tauri-apps/api/path';
-import { readBinaryFile } from '@tauri-apps/api/fs';
 
 @Component({
   selector: 'app-point-of-sale',
@@ -31,16 +26,18 @@ import { readBinaryFile } from '@tauri-apps/api/fs';
     ReceiptComponent,
   ],
   templateUrl: './point-of-sale.component.html',
-  styleUrl: './point-of-sale.component.less',
+  styleUrl: './point-of-sale.component.scss',
 })
 export class PointOfSaleComponent {
-  mode = toSignal(this.pointOfSaleService.mode$);
+  mode = toSignal(this.pointOfSaleService.mode$, {
+    requireSync: true,
+  });
   barcodes$;
   readonly dialog = inject(MatDialog);
 
   constructor(
+    barcodeService: BarcodeService,
     public pointOfSaleService: PointOfSaleService,
-    private barcodeService: BarcodeService,
     private router: Router,
   ) {
     this.router.events
@@ -83,6 +80,7 @@ export class PointOfSaleComponent {
   imports: [MatDialogModule],
   templateUrl: './bonus-sound-dialog.component.html',
   styleUrl: './bonus-sound-dialog.component.less',
+  standalone: true,
 })
 export class BonusSoundDialogComponent {
   readonly dialogRef = inject(MatDialogRef<BonusSoundDialogComponent>);

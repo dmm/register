@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
-    selector: 'app-receipt',
-    imports: [CommonModule],
-    templateUrl: './receipt.component.html',
-    styleUrl: './receipt.component.less'
+  selector: 'app-receipt',
+  imports: [CommonModule],
+  templateUrl: './receipt.component.html',
+  styleUrl: './receipt.component.scss',
 })
 export class ReceiptComponent {
-  @Input() paymentUser = '';
+  paymentUser = input('');
 }

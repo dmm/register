@@ -4,7 +4,6 @@
   display: grid;
   grid-template-columns: 1fr 400px;
   grid-template-rows: auto;
-  background-color: lightgoldenrodyellow;
 }
 
 .main {
@@ -43,6 +42,7 @@
   padding-right: 10px;
 
   border-left: 1px solid purple;
+
 }
 
 .item-list {

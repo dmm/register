@@ -3,12 +3,11 @@
   padding: 0;
   height: 100%;
   display: grid;
-  grid-template-rows: 60px auto;
+  grid-template-rows: 60px 1fr;
 }
 
 .header {
   grid-row: 1;
-  background-color: lightsalmon;
   display: grid;
   grid-template-columns: 300px 1fr 200px;
   grid-template-rows: 1fr 50px 1fr;
@@ -28,4 +27,8 @@
 
 router-outlet {
   display: none;
+}
+
+img {
+    height: 100%;
 }

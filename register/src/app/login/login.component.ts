@@ -6,7 +6,7 @@ import { LoginService } from '../login.service';
   selector: 'app-login',
   imports: [MatIconModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.less',
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   constructor(public loginService: LoginService) {

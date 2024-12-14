@@ -1,0 +1,46 @@
+:host {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  grid-template-rows: 45px 250px;
+}
+
+h1 {
+    margin: 0;
+}
+
+.nfc-logo > img {
+    height: 100%;
+}
+
+@keyframes gentle-rotate {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes shrink-grow {
+  0%,
+  100% {
+    transform: scale(1.5); /* Original size */
+  }
+  50% {
+    transform: scale(0.8); /* Shrink to 80% of the original size */
+  }
+}
+
+h1 {
+  animation: shrink-grow 1.5s ease-in-out infinite;
+}
+
+div.nfc-logo > img {
+  animation: gentle-rotate 3s ease-in-out infinite;
+}

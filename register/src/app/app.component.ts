@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-root',
   imports: [CommonModule, RouterOutlet, MatButtonModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.less',
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'register';

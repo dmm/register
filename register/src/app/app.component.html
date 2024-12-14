@@ -1,18 +1,17 @@
 <div class="container">
-  <div class="header">
+  <div class="header neutral">
     <div class="user-banner">
-      <div *ngIf="!(isLoggedIn$ | async)"></div>
       <div *ngIf="isLoggedIn$ | async">
-        User: {{ this.loginService.currentUser }}
+        <span>
+          🫂 User: {{ this.loginService.currentUser }} 
+        </span>
       </div>
     </div>
     <button
       *ngIf="isLoggedIn$ | async"
       (click)="logout()"
-      mat-raised-button
-      color="warn"
-      class="button"
-    >
+      mat-flat-button
+      >
       Logout
     </button>
   </div>

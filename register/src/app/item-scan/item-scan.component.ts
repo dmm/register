@@ -7,7 +7,6 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { LoginService } from '../login.service';
 import { BarcodeService } from '../barcode.service';
 import { ItemService } from '../item.service';
 
@@ -20,7 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-item-scan',
   imports: [CommonModule, MatButtonModule, SlicePipe, CurrencyPipe],
   templateUrl: './item-scan.component.html',
-  styleUrl: './item-scan.component.less',
+  styleUrl: './item-scan.component.scss',
+  standalone: true,
 })
 export class ItemScanComponent {
   @ViewChild('itemList', { static: false }) private itemList: ElementRef =
@@ -31,7 +31,7 @@ export class ItemScanComponent {
   @Output() submitted = new EventEmitter<Cart>();
 
   constructor(
-    private barcodeService: BarcodeService,
+    barcodeService: BarcodeService,
     private itemService: ItemService,
     private changeDetection: ChangeDetectorRef,
   ) {

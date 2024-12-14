@@ -1,5 +1,12 @@
-<ng-container [ngSwitch]="mode()?.kind">
-<app-item-scan *ngSwitchCase="'ItemScan'" (submitted)="cartSubmitted($event)"/>
-<app-payment *ngSwitchCase="'Payment'" (payed)="paymentSubmitted($event)"  />
-<app-receipt *ngSwitchCase="'Receipt'"  />
-</ng-container>
+@let currentMode = mode();
+@switch (currentMode.kind) {
+  @case ("ItemScan") {
+    <app-item-scan (submitted)="cartSubmitted($event)" />
+  }
+  @case ("Payment") {
+    <app-payment (payed)="paymentSubmitted($event)" />
+  }
+  @case ("Receipt") {
+    <app-receipt [paymentUser]="currentMode.paymentUser" />
+  }
+}

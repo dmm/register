@@ -1,0 +1,64 @@
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+$theme: mat.define-theme(
+    (
+        color: (
+        theme-type: light,
+        primary: mat.$cyan-palette,
+        tertiary: mat.$magenta-palette,
+        use-system-variables: true,
+    ),
+        typography: (
+            use-system-variables: true,
+        ),
+        density: (
+            scale: 0,
+        )
+    )
+);
+html {
+    @include mat.system-level-colors($theme);
+    @include mat.system-level-typography($theme);
+}
+
+.primary {
+  --mdc-icon-button-icon-color: var(--sys-primary);
+  --mdc-outlined-button-label-text-color: var(--sys-primary);
+  --mdc-text-button-label-text-color: var(--sys-primary);
+}
+
+.tertiary {
+  --mdc-icon-button-icon-color: var(--sys-tertiary);
+  --mdc-outlined-button-label-text-color: var(--sys-tertiary);
+  --mdc-text-button-label-text-color: var(--sys-tertiary);
+
+  --mdc-chip-elevated-container-color: var(--sys-tertiary) !important;
+  --mdc-chip-label-text-color: var(--sys-on-tertiary) !important;
+}
+
+.error {
+  --mdc-icon-button-icon-color: var(--sys-error);
+  --mdc-outlined-button-label-text-color: var(--sys-error);
+  --mdc-text-button-label-text-color: var(--sys-error);
+}
+
+.neutral {
+  $neutral: #000;
+  --mdc-icon-button-icon-color: #{$neutral};
+  --mdc-outlined-button-label-text-color: #{$neutral};
+  --mdc-text-button-label-text-color: #{$neutral};
+}
+
+.error-text {
+  color: var(--sys-error);
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 1024px;
+    height: 600px;
+}
