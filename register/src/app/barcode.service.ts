@@ -20,10 +20,10 @@ export interface BonusSound {
 export type Code = Product | BonusSound;
 
 function parseCode(codeString: string): Code {
-  if (codeString.startsWith('777')) {
+  if (codeString.startsWith('7777')) {
     return {
       kind: 'BonusSound',
-      code: codeString.substring(3),
+      code: codeString.substring(4),
     };
   } else {
     return {
