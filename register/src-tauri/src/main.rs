@@ -41,12 +41,12 @@ async fn play_bonus_sound(app_handle: AppHandle, number: i32) {
     .await
     {
         Ok(Err(err)) => {
-            error!("Error playing bonus sound: {}", err);
+            error!("Error playing bonus sound {}: {}", &bonus_name, err);
         }
         Ok(Ok(_)) => (),
 
         Err(err) => {
-            error!("Error running bonus sound thread: {}", err);
+            error!("Error running bonus sound thread {}: {}", &bonus_name, err);
         }
     }
 }
