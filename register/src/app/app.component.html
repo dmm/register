@@ -1,9 +1,9 @@
 <div class="container">
-  <div class="header neutral">
+  <nav class="header error">
     <div class="user-banner">
       <div *ngIf="isLoggedIn$ | async">
         <span>
-          🫂 User: {{ this.loginService.currentUser }} 
+          🫂 User: <span class="username">{{ this.loginService.currentUser }}</span>
         </span>
       </div>
     </div>
@@ -14,6 +14,6 @@
       >
       Logout
     </button>
-  </div>
+  </nav>
   <router-outlet></router-outlet>
 </div>

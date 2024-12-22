@@ -79,7 +79,7 @@ export class PointOfSaleComponent {
   selector: 'app-bonus-sound-dialog',
   imports: [MatDialogModule],
   templateUrl: './bonus-sound-dialog.component.html',
-  styleUrl: './bonus-sound-dialog.component.less',
+  styleUrl: './bonus-sound-dialog.component.scss',
   standalone: true,
 })
 export class BonusSoundDialogComponent {

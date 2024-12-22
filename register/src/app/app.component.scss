@@ -10,14 +10,19 @@
   grid-row: 1;
   display: grid;
   grid-template-columns: 300px 1fr 200px;
-  grid-template-rows: 1fr 50px 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  background-color: var(--mat-sys-secondary-container);
 }
 
 .header > .user-banner {
   grid-column: 1;
   grid-row: 2;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
+}
+
+.header > .user-banner > .username {
+    color: var(--mat-sys-on-surface);
 }
 
 .header > button {

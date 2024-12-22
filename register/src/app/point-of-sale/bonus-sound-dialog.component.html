@@ -1,11 +1,9 @@
-<h2 mat-dialog-title>Bonus Sound!</h2>
-<mat-dialog-content>
-  <div class="button-container">
-    <button mat-raised-button color="primary" (click)="playSound()">
-      Play Sound
+<h2 mat-dialog-title>Bonus Sound</h2>
+<mat-dialog-actions>
+    <button mat-button class="play" (click)="playSound()">
+      🔊 Play Sound 🔊
     </button>
-    <button mat-raised-button (click)="close()">
-      Close
+    <button mat-button (click)="close()">
+      ❌ Close ❌
     </button>
-  </div>
-</mat-dialog-content>
+</mat-dialog-actions>

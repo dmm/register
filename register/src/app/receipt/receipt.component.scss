@@ -1,0 +1,38 @@
+:host {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 200px 200px 200px 1fr;
+    grid-template-rows: 200px 1fr 1fr 200px;
+}
+
+h1 {
+    grid-row: 1;
+    grid-column: 2 / 5;
+    text-align: center;
+}
+
+h1 > em {
+    color: var(--mat-sys-tertiary);
+}
+
+p {
+    grid-row: 2 ;
+    grid-column: 2;
+}
+
+img {
+    grid-column: 3;
+    height: 200px;
+    animation: printing 1.5s steps(10) infinite;
+    transform-origin: top center;
+}
+
+@keyframes printing {
+    0% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
