@@ -1,0 +1,32 @@
+:host {
+    height: 400px;
+
+}
+
+.button-container {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+button {
+    font-size: large;
+
+    min-width: unset !important;
+
+    margin: 15px;
+    align-self: center;
+}
+
+button.play {
+    font-size: larger;
+}
+
+button.error {
+    color: var(--mat-sys-error);
+    background-color: var(--mat-sys-error-container);
+}
+
+mat-dialog-actions {
+    justify-content: center;
+}

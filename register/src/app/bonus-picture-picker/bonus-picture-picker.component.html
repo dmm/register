@@ -1,0 +1,6 @@
+<h1>Select a Feedback Image for the customer</h1>
+<div class="images">
+  @for (picture of bonusPictures; track picture; let index = $index) {
+  <img src="assets/images/bonus_pictures/{{ picture }}.png" [style.grid-column]="(index % 3) + 1" (click)="selectImage(picture)" />
+  }
+</div>

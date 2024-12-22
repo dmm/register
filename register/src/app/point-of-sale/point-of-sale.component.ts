@@ -15,6 +15,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { BarcodeService, BonusSound, Code } from '../barcode.service';
+import { BonusPicturePickerComponent } from '../bonus-picture-picker/bonus-picture-picker.component';
 
 @Component({
   selector: 'app-point-of-sale',
@@ -24,6 +25,7 @@ import { BarcodeService, BonusSound, Code } from '../barcode.service';
     ItemScanComponent,
     PaymentComponent,
     ReceiptComponent,
+    BonusPicturePickerComponent,
   ],
   templateUrl: './point-of-sale.component.html',
   styleUrl: './point-of-sale.component.scss',
@@ -57,11 +59,17 @@ export class PointOfSaleComponent {
   handleBarcode(code: Code) {
     if (code.kind === 'BonusSound') {
       console.log(`GOT BONUS SOUND! ${code.code}`);
+      this.dialog.closeAll();
       this.dialog.open(BonusSoundDialogComponent, {
         data: code,
         width: '250px',
       });
     }
+  }
+
+  bonusImageSubmitted(imageName: string) {
+    console.log(`bonus image submitted! ${imageName}`);
+    this.pointOfSaleService.submitBonusPicture(imageName);
   }
 
   cartSubmitted(cart: Cart) {

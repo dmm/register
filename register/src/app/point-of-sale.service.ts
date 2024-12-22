@@ -8,6 +8,11 @@ interface ItemScanMode {
   kind: 'ItemScan';
 }
 
+interface BonusPictureMode {
+  kind: 'BonusPicture';
+  cart: Cart;
+}
+
 interface PaymentMode {
   kind: 'Payment';
   cart: Cart;
@@ -18,7 +23,7 @@ interface ReceiptMode {
   paymentUser: string;
 }
 
-type Mode = ItemScanMode | PaymentMode | ReceiptMode;
+type Mode = ItemScanMode | BonusPictureMode | PaymentMode | ReceiptMode;
 
 @Injectable({
   providedIn: 'root',
@@ -32,8 +37,8 @@ export class PointOfSaleService {
   constructor(private loginService: LoginService) {}
 
   playBonusSound(code: string) {
-    let num = parseInt(code.substring(4), 10);
-    invoke('play_bonus_sound', { number: num }).then((res) => {
+    let num = parseInt(code, 10);
+    invoke('play_bonus_sound', { number: num }).then((_res) => {
       console.log('Bonus Sound played!');
     });
   }
@@ -44,9 +49,21 @@ export class PointOfSaleService {
 
   submitCart(cart: Cart) {
     this.currentMode.next({
-      kind: 'Payment',
+      kind: 'BonusPicture',
       cart: cart,
     });
+  }
+
+  submitBonusPicture(imageName: string) {
+    let state = this.currentMode.getValue();
+    if (state.kind === 'BonusPicture') {
+      let cart = state.cart;
+      cart.bonusImage = imageName;
+      this.currentMode.next({
+        kind: 'Payment',
+        cart: cart,
+      });
+    }
   }
 
   paymentSubmitted(paymentUser: string) {
@@ -65,7 +82,7 @@ export class PointOfSaleService {
         this.loginService.currentUser,
       );
 
-      invoke('print_receipt', receiptCart).then((res) => {
+      invoke('print_receipt', receiptCart).then((_res) => {
         console.log('Receipt printed!');
       });
 

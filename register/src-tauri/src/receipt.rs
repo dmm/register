@@ -16,6 +16,10 @@ const CHARS_BY_LINE: usize = 32;
 #[folder = "icons/"]
 struct Icons;
 
+#[derive(Embed)]
+#[folder = "../src/assets/images/bonus_pictures/"]
+struct BonusImages;
+
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct Item {
@@ -41,6 +45,7 @@ pub(crate) struct Cart {
     pub customer: String,
     pub checker: String,
     pub sound_code: String,
+    pub bonus_image: String,
 }
 
 impl Cart {
@@ -52,6 +57,14 @@ impl Cart {
 pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
     let driver = FileDriver::open(Path::new("/dev/usb/lp0"))?;
     //    let driver = ConsoleDriver::open(true);
+
+    let bonus_image = match BonusImages::get(&format!("{}.png", &cart.bonus_image)) {
+        Some(logo) => logo,
+        None => {
+            error!("Couldn't read bonus image {}!", &cart.bonus_image);
+            return Ok(());
+        }
+    };
 
     let mut printer = Printer::new(driver.clone(), Protocol::default(), None);
     printer.debug_mode(Some(escpos::utils::DebugMode::Dec));
@@ -115,6 +128,19 @@ pub(crate) fn print_receipt(cart: Cart) -> Result<(), PrinterError> {
     printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
     printer.writeln(&format!("Thank you {}!", &cart.customer))?;
     printer.writeln(&format!("Your checker today was {}.", &cart.checker))?;
+    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
+
+    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
+    printer.writeln(&format!("{}'s", &cart.checker))?;
+    printer.writeln("REVIEW OF CUSTOMER")?;
+    printer.writeln(&format!("{}", &cart.customer))?;
+    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
+
+    printer.bit_image_from_bytes_option(
+        &bonus_image.data,
+        BitImageOption::new(Some(272), None, BitImageSize::Normal)?,
+    )?;
+    printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
 
     printer.writeln("-".repeat(CHARS_BY_LINE).as_str())?;
     printer.size(2, 2)?.writeln("BONUS SOUND")?.reset_size()?;

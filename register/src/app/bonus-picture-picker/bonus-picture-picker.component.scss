@@ -1,0 +1,25 @@
+:host {
+    display: grid;
+    grid-template-rows: 80px 1fr;
+    margin-right: 100px;
+    margin-left: 100px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.images {
+    grid-row: 2;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 10px;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+}
+

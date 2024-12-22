@@ -19,6 +19,7 @@ export class CartItem {
 
 export class Cart {
   items: Map<string, CartItem> = new Map();
+  bonusImage?: string;
 
   constructor() {}
 
@@ -72,6 +73,7 @@ export class Cart {
         customer: customer,
         checker: checker,
         soundCode: this.generateSoundCode(),
+        bonusImage: this.bonusImage,
       },
     };
   }

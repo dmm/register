@@ -3,6 +3,9 @@
   @case ("ItemScan") {
     <app-item-scan (submitted)="cartSubmitted($event)" />
   }
+  @case ("BonusPicture") {
+    <app-bonus-picture-picker (imageSelected)="bonusImageSubmitted($event)" />
+  }
   @case ("Payment") {
     <app-payment (payed)="paymentSubmitted($event)" />
   }
