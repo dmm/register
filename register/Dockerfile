@@ -4,14 +4,15 @@ RUN dpkg --add-architecture arm64
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu npm \
     libwebkit2gtk-4.0-dev:arm64 libssl-dev:arm64 libsoup2.4-dev:arm64 \
-    libjavascriptcoregtk-4.0-dev:arm64
+    libjavascriptcoregtk-4.0-dev:arm64 libclang-common-14-dev libasound2-dev:arm64 libudev-dev:arm64 \
+    libclang-dev cmake libllvm14:arm64 libnfc-dev:arm64
 
 
 RUN rustup toolchain install nightly && rustup target add aarch64-unknown-linux-gnu && \
     rustup toolchain install stable-aarch64-unknown-linux-gnu
 
 # install tauri deps
-RUN cargo install --locked tauri-cli && \
+RUN cargo install --locked tauri-cli@1.6.3 && \
     rustup target add wasm32-unknown-unknown && \
     cargo install --locked trunk && \
     cargo install --locked wasm-bindgen-cli && \
